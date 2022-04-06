@@ -29,6 +29,24 @@ def optimize(f, g, x0, n, count, prob):
     Returns:
         x_best (np.array): best selection of variables found
     """
-    x_best = x0
+    x_best = nesterov(f, g, x0, n, count, .4, .6)
 
     return x_best
+
+def nesterov(f, g, x0, n, count, alpha, beta):
+    x = x0
+    v = np.zeros(len(x0))
+    while count() < n:
+
+        g_nest = g(x + beta*v)
+        d_nest = -1/np.linalg.norm(g_nest) * g_nest
+        v_new = beta*v + alpha*d_nest
+
+        x += v_new
+        v = v_new
+        alpha *= .8
+        
+
+    x_best = x
+    return x_best
+
